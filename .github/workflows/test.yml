@@ -25,6 +25,9 @@ jobs:
 
   tests:
     runs-on: ${{ matrix.os }}
+    env:
+      ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+      ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
@@ -43,6 +46,9 @@ jobs:
         run: npm test
   windows:
     runs-on: windows-latest
+    env:
+      ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+      ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
     strategy:
       matrix:
         node-version:
