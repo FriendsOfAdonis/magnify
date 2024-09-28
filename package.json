@@ -47,12 +47,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/FriendsOfAdonis/secrets"
+    "url": "https://github.com/FriendsOfAdonis/magnify"
   },
   "bugs": {
-    "url": "https://github.com/FriendsOfAdonis/secrets/issues"
+    "url": "https://github.com/FriendsOfAdonis/magnify/issues"
   },
-  "homepage": "https://friendsofadonis.github.io/docs/secrets/getting-started",
+  "homepage": "https://friendsofadonis.github.io/docs/magnify/getting-started",
   "license": "MIT",
   "devDependencies": {
     "@adonisjs/assembler": "^7.7.0",
