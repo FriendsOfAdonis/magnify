@@ -50,8 +50,6 @@ export class TypesenseEngine implements MagnifyEngine {
     const Static = models[0].constructor as SearchableModel
     const collection = await this.#getOrCreateCollectionFromModel(Static)
 
-    console.log('removed models', models)
-
     await Promise.all(
       models.map((model) => collection.documents(model.$searchKeyValue.toString()).delete())
     )

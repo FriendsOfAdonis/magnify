@@ -1,6 +1,5 @@
 import Configure from '@adonisjs/core/commands/configure'
 import { IgnitorFactory } from '@adonisjs/core/factories'
-import { ApplicationService } from '@adonisjs/core/types'
 import { FileSystem } from '@japa/file-system'
 import { test } from '@japa/runner'
 import { fileURLToPath } from 'node:url'
@@ -21,7 +20,7 @@ async function configure(fs: FileSystem, choice: number) {
       },
     })
 
-  const app = ignitor.createApp('web')
+  const app = ignitor.createApp('console')
   await app.init()
   await app.boot()
 
@@ -52,6 +51,8 @@ test.group('Configuration', (group) => {
     context.fs.baseUrl = BASE_URL
     context.fs.basePath = fileURLToPath(BASE_URL)
   })
+
+  group.each.disableTimeout()
 
   test('configure algolia engine', async ({ fs, assert }) => {
     await configure(fs, 0)

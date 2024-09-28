@@ -69,10 +69,12 @@
     "@types/node": "^20.14.5",
     "@types/sinon": "^17.0.3",
     "algoliasearch": "^5.6.1",
+    "better-sqlite3": "^11.3.0",
     "c8": "^10.1.2",
     "copyfiles": "^2.4.1",
     "del-cli": "^5.1.0",
     "eslint": "^9.9.0",
+    "luxon": "^3.5.0",
     "meilisearch": "^0.42.0",
     "np": "^10.0.6",
     "prettier": "^3.3.2",
@@ -81,8 +83,7 @@
     "testcontainers": "^10.13.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
-    "typesense": "^1.8.2",
-    "luxon": "^3.5.0"
+    "typesense": "^1.8.2"
   },
   "peerDependencies": {
     "@adonisjs/core": "^6.2.0",

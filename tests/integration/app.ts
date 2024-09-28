@@ -66,6 +66,8 @@ export async function createApp() {
     new URL('../fixtures/migrations/create_users_table.ts', import.meta.url),
     testApp.migrationsPath('create_users_table.ts')
   )
+
+  return testApp
 }
 
 export async function initializeDatabase(app: ApplicationService) {
@@ -104,8 +106,6 @@ async function seedDatabase() {
     yield { name: 'Amos Larson Sr.' }
   }
 
-  // for (let i = 0; i < 44; i++) {
   const toCreate = [...collection()]
   await User.createMany(toCreate)
-  // }
 }
