@@ -15,6 +15,7 @@
     ".": "./build/index.js",
     "./commands": "./build/commands/main.js",
     "./magnify_provider": "./build/providers/magnify_provider.js",
+    "./services/magnify": "./build/services/magnify.js",
     "./types": "./build/src/types.js"
   },
   "scripts": {

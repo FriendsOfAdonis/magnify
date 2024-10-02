@@ -20,4 +20,7 @@ export class FakeEngine extends MagnifyEngine {
   flush(): Promise<void> {
     throw new Error('Method not implemented.')
   }
+  get client(): any {
+    throw new Error('Method not implemented.')
+  }
 }

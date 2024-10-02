@@ -8,11 +8,15 @@ import is from '@adonisjs/core/helpers/is'
 export class MeilisearchEngine implements MagnifyEngine {
   #config: MeilisearchConfig
 
-  client: MeiliSearch
+  readonly #client: MeiliSearch
 
   constructor(config: MeilisearchConfig) {
     this.#config = config
-    this.client = new MeiliSearch(config)
+    this.#client = new MeiliSearch(config)
+  }
+
+  get client(): MeiliSearch {
+    return this.#client
   }
 
   async update(...models: SearchableRow[]): Promise<void> {
@@ -22,7 +26,7 @@ export class MeilisearchEngine implements MagnifyEngine {
 
     const Static = models[0].constructor as SearchableModel
 
-    const index = this.client.index(Static.$searchIndex)
+    const index = this.#client.index(Static.$searchIndex)
 
     const objects = models.map((model) => {
       const searchableData = model.toSearchableObject()
@@ -43,7 +47,7 @@ export class MeilisearchEngine implements MagnifyEngine {
 
     const Static = models[0].constructor as SearchableModel
 
-    const index = this.client.index(Static.$searchIndex)
+    const index = this.#client.index(Static.$searchIndex)
 
     const keys = models.map((model) => model.$searchKeyValue)
 
@@ -74,7 +78,7 @@ export class MeilisearchEngine implements MagnifyEngine {
   }
 
   async flush(model: SearchableModel): Promise<void> {
-    const index = this.client.index(model.$searchIndex)
+    const index = this.#client.index(model.$searchIndex)
     await index.deleteAllDocuments()
   }
 
@@ -93,8 +97,8 @@ export class MeilisearchEngine implements MagnifyEngine {
   async syncIndexSettings() {
     if (!this.#config.indexSettings) return
     for (const [name, settings] of Object.entries(this.#config.indexSettings)) {
-      await this.client.createIndex(name)
-      await this.client.index(name).updateSettings(settings)
+      await this.#client.createIndex(name)
+      await this.#client.index(name).updateSettings(settings)
     }
   }
 
@@ -147,7 +151,7 @@ export class MeilisearchEngine implements MagnifyEngine {
     T extends Record<string, any> = Record<string, any>,
     S extends SearchParams = SearchParams,
   >(builder: Builder, searchParams: S) {
-    const index = this.client.index<T>(builder.$index ?? builder.$model.$searchIndex)
+    const index = this.#client.index<T>(builder.$index ?? builder.$model.$searchIndex)
     // TODO: Add builder options
 
     if (searchParams.attributesToRetrieve) {

@@ -18,7 +18,7 @@ export default class Flush extends BaseCommand {
     }
 
     await model.$removeAllFromSearch()
-    this.logger.success(`The index [${model.$searchIndex}] has been successfuly flushed`)
+    this.logger.success(`The index [${model.$searchIndex}] has been successfully flushed`)
   }
 
   async importModel(model: string) {

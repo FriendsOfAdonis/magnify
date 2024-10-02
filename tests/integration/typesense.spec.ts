@@ -185,7 +185,7 @@ test.group('Typesense', (group) => {
     await command.exec()
     command.assertSucceeded()
 
-    // We wait for the documents to be successfuly flushed by the engine
+    // We wait for the documents to be successfully flushed by the engine
     await sleep(2)
 
     const results = await User.search('').get()

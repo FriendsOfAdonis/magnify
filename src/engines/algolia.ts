@@ -12,10 +12,14 @@ import {
 import is from '@adonisjs/core/helpers/is'
 
 export class AlgoliaEngine implements MagnifyEngine {
-  client: Algoliasearch
+  readonly #client: Algoliasearch
 
   constructor(config: AlgoliaConfig) {
-    this.client = algoliasearch(config.appId, config.apiKey, config.options)
+    this.#client = algoliasearch(config.appId, config.apiKey, config.options)
+  }
+
+  get client(): Algoliasearch {
+    return this.#client
   }
 
   async update(...models: SearchableRow[]): Promise<void> {
@@ -34,7 +38,7 @@ export class AlgoliaEngine implements MagnifyEngine {
       }
     })
 
-    await this.client.saveObjects({
+    await this.#client.saveObjects({
       indexName: Static.$searchIndex,
       objects: objects,
     })
@@ -48,7 +52,7 @@ export class AlgoliaEngine implements MagnifyEngine {
     const Static = models[0].constructor as SearchableModel
     const keys = models.map((model) => model.$searchKeyValue.toString())
 
-    await this.client.deleteObjects({ indexName: Static.$searchIndex, objectIDs: keys })
+    await this.#client.deleteObjects({ indexName: Static.$searchIndex, objectIDs: keys })
   }
 
   async search(builder: Builder): Promise<SearchResponse> {
@@ -79,7 +83,7 @@ export class AlgoliaEngine implements MagnifyEngine {
   }
 
   async flush(model: SearchableModel): Promise<void> {
-    await this.client.clearObjects({ indexName: model.$searchIndex })
+    await this.#client.clearObjects({ indexName: model.$searchIndex })
   }
 
   async get(builder: Builder): Promise<any[]> {
@@ -108,7 +112,7 @@ export class AlgoliaEngine implements MagnifyEngine {
   }
 
   #performSearch(builder: Builder, params: SearchParams = {}) {
-    return this.client.searchSingleIndex({
+    return this.#client.searchSingleIndex({
       indexName: builder.$model.$searchIndex,
       searchParams: {
         query: builder.$query,
