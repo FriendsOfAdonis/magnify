@@ -1,11 +1,12 @@
-import { test } from '@japa/runner'
-import { MagnifyManager } from '../../src/magnify_manager.js'
-import { MeilisearchEngine } from '../../src/engines/meilisearch.js'
-import { MagnifyEngine } from '../../src/engines/main.js'
-import { TypesenseEngine } from '../../src/engines/typesense.js'
-import { AlgoliaEngine } from '../../src/engines/algolia.js'
+import { Algoliasearch } from 'algoliasearch'
 import { MeiliSearch } from 'meilisearch'
+import { test } from '@japa/runner'
 import { Client } from 'typesense'
+
+import { MeilisearchEngine } from '../../src/engines/meilisearch.js'
+import { TypesenseEngine } from '../../src/engines/typesense.js'
+import { MagnifyManager } from '../../src/magnify_manager.js'
+import { AlgoliaEngine } from '../../src/engines/algolia.js'
 
 test.group('Magnify manager', () => {
   test('create engine instance from the manager', ({ assert, expectTypeOf }) => {
@@ -34,16 +35,16 @@ test.group('Magnify manager', () => {
       .parameter(0)
       .toEqualTypeOf<'meilisearch' | 'typesense' | 'algolia' | undefined>()
 
-    expectTypeOf(manager.engine('meilisearch')).toEqualTypeOf<MagnifyEngine>()
-    expectTypeOf(manager.engine('algolia')).toEqualTypeOf<MagnifyEngine>()
-    expectTypeOf(manager.engine('typesense')).toEqualTypeOf<MagnifyEngine>()
+    expectTypeOf(manager.engine('meilisearch')).toEqualTypeOf<MeilisearchEngine>()
+    expectTypeOf(manager.engine('algolia')).toEqualTypeOf<AlgoliaEngine>()
+    expectTypeOf(manager.engine('typesense')).toEqualTypeOf<TypesenseEngine>()
 
     assert.instanceOf(manager.engine('meilisearch'), MeilisearchEngine)
     assert.instanceOf(manager.engine('algolia'), AlgoliaEngine)
     assert.instanceOf(manager.engine('typesense'), TypesenseEngine)
   })
 
-  test('get the client from an engine', ({ assert }) => {
+  test('get the client from an engine', ({ expectTypeOf }) => {
     const manager = new MagnifyManager({
       default: 'meilisearch',
       engines: {
@@ -65,8 +66,8 @@ test.group('Magnify manager', () => {
       },
     })
 
-    assert.instanceOf(manager.engine('meilisearch').client, MeiliSearch)
-    // assert.instanceOf(manager.engine('algolia').client, Algoliasearch) // algolia exports a type and not a class
-    assert.instanceOf(manager.engine('typesense').client, Client)
+    expectTypeOf(manager.engine('meilisearch').client).toEqualTypeOf<MeiliSearch>()
+    expectTypeOf(manager.engine('algolia').client).toEqualTypeOf<Algoliasearch>()
+    expectTypeOf(manager.engine('typesense').client).toEqualTypeOf<Client>()
   })
 })

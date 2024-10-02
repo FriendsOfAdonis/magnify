@@ -44,6 +44,4 @@ export abstract class MagnifyEngine {
   async get(builder: Builder): Promise<any[]> {
     return this.map(builder, await this.search(builder))
   }
-
-  abstract get client(): any
 }

@@ -3,7 +3,7 @@ import { NormalizeConstructor } from '@adonisjs/core/types/helpers'
 import { BaseModel } from '@adonisjs/lucid/orm'
 import { ModelObject } from '@adonisjs/lucid/types/model'
 import { Builder } from '../builder.js'
-import magnify from '../../services/magnify.js'
+import magnify from '../../services/main.js'
 import { MagnifyEngine } from '../engines/main.js'
 import { SearchableModel } from '../types.js'
 
