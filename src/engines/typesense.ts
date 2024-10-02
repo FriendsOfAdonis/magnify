@@ -10,11 +10,15 @@ import is from '@adonisjs/core/helpers/is'
 export class TypesenseEngine implements MagnifyEngine {
   #config: TypesenseConfig
 
-  client: Client
+  readonly #client: Client
 
   constructor(config: TypesenseConfig) {
     this.#config = config
-    this.client = new Client(config)
+    this.#client = new Client(config)
+  }
+
+  get client(): Client {
+    return this.#client
   }
 
   async update(...models: SearchableRow[]): Promise<void> {
@@ -60,7 +64,7 @@ export class TypesenseEngine implements MagnifyEngine {
   }
 
   async flush(model: SearchableModel): Promise<void> {
-    const collection = this.client.collections(model.$searchIndex)
+    const collection = this.#client.collections(model.$searchIndex)
     await collection.delete()
   }
 
@@ -137,7 +141,7 @@ export class TypesenseEngine implements MagnifyEngine {
 
   async #getOrCreateCollectionFromModel(model: SearchableModel): Promise<Collection.default> {
     const collectionName = model.$searchIndex
-    const collection = this.client.collections(collectionName)
+    const collection = this.#client.collections(collectionName)
 
     const schema = {
       ...this.#config.collectionSettings[collectionName],
@@ -148,7 +152,7 @@ export class TypesenseEngine implements MagnifyEngine {
       return collection
     }
 
-    await this.client.collections().create(schema)
+    await this.#client.collections().create(schema)
 
     return collection
   }

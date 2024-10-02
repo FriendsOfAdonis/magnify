@@ -19,7 +19,7 @@ export default class Import extends BaseCommand {
 
     await model.$makeAllSearchable()
     this.logger.success(
-      `The table [${model.table}] has been successfuly imported into the [${model.$searchIndex}] index`
+      `The table [${model.table}] has been successfully imported into the [${model.$searchIndex}] index`
     )
   }
 

@@ -1,9 +1,8 @@
 import { RuntimeException } from '@adonisjs/core/exceptions'
 import { ManagerEngineFactory } from './types.js'
-import { MagnifyEngine } from './engines/main.js'
 
 export class MagnifyManager<KnownEngines extends Record<string, ManagerEngineFactory>> {
-  #cachedEngines: Partial<Record<keyof KnownEngines, MagnifyEngine>> = {}
+  #cachedEngines: Map<keyof KnownEngines, ReturnType<KnownEngines[keyof KnownEngines]>> = new Map()
 
   constructor(public config: { default?: keyof KnownEngines; engines: KnownEngines }) {}
 
@@ -11,24 +10,28 @@ export class MagnifyManager<KnownEngines extends Record<string, ManagerEngineFac
    * Use one of the registered engines.
    *
    * ```ts
-   * manager.use() // returns default engine
-   * manager.use('meilisearch')
+   * manager.engine() // returns default engine
+   * manager.engine('meilisearch')
    * ```
    */
-  engine<EngineName extends keyof KnownEngines>(engine?: EngineName): MagnifyEngine {
-    const engineToUse = engine || this.config.default
+  engine<EngineName extends keyof KnownEngines>(
+    engine?: EngineName
+  ): ReturnType<KnownEngines[EngineName]> {
+    const engineToUse = (engine || this.config.default) as keyof KnownEngines
+    if (!engineToUse) throw new RuntimeException('No search engine selected')
 
-    if (!engineToUse) {
-      throw new RuntimeException(
-        'Cannot create engine instance. No default engine is defined in the config.'
-      )
+    /**
+     * Check if the search engine was already instantiated
+     */
+    if (this.#cachedEngines.has(engineToUse)) {
+      return this.#cachedEngines.get(engineToUse)!
     }
 
-    const cachedEngine = this.#cachedEngines[engineToUse]
-    if (cachedEngine) {
-      return cachedEngine
-    }
-
-    return this.config.engines[engineToUse]()
+    /**
+     * Otherwise create a new instance and cache it
+     */
+    const newEngine = this.config.engines[engineToUse]() as ReturnType<KnownEngines[EngineName]>
+    this.#cachedEngines.set(engineToUse, newEngine)
+    return newEngine
   }
 }

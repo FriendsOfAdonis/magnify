@@ -12,7 +12,7 @@ export default class SyncIndexSettings extends BaseCommand {
     const engine = magnify.engine()
 
     if (!engine.syncIndexSettings) {
-      this.logger.error(`The drive "${String(engine)}" does not support updating index settings.`)
+      this.logger.error(`The driver "${String(engine)}" does not support updating index settings.`)
       return
     }
 
